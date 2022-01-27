@@ -1,21 +1,24 @@
-import { Entity } from "../core/domain/Entity";
-import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { UniqueEntityID } from "../helpers/UniqueEntityID";
 
-interface IOrderProps {
+export interface IOrderProps {
+  id?: string;
   orderStatus: boolean;
   total: number;
   products: string[];
   orderDate: string;
 }
 
-type OrderOrNull = Order | null;
+export class Order {
+  readonly props: IOrderProps;
 
-class Order extends Entity<IOrderProps> {
-  private constructor(props: IOrderProps, id?: UniqueEntityID) {
-    super(props, id);
+  private constructor(props: IOrderProps) {
+    props.id = props.id ? props.id : new UniqueEntityID().value;
+    this.props = props;
   }
-  public static create(props: IOrderProps, id?: UniqueEntityID): OrderOrNull {
-    const { orderStatus, total, products, orderDate } = props;
-    return new Order(props, id);
+
+  public static create(props: IOrderProps): Order {
+    let { orderStatus, total, products, orderDate } = props;
+    props.orderStatus = props.orderStatus ? props.orderStatus : false;
+    return new Order(props);
   }
 }

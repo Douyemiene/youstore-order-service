@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 
 interface Order {
-  id: "";
+  id: string;
   orderStatus: boolean;
   total: number;
   products: string[];
