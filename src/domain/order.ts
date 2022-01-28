@@ -2,6 +2,7 @@ import { UniqueEntityID } from "../helpers/UniqueEntityID";
 
 export interface IOrderProps {
   id?: string;
+  customerID: string;
   orderStatus: boolean;
   total: number;
   products: string[];
