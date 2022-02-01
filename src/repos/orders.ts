@@ -21,7 +21,13 @@ export class OrderRepo implements IOrderRepo {
   }
 
   async getOrdersByCustomerId(id: string) {
-    const orders = await this.orders.findById(id).exec();
+    const orders = await this.orders.find({ customerId: id }).exec();
+    console.log("repo orders", orders);
+    return orders;
+  }
+
+  async getOrderById(id: string) {
+    const orders = await this.orders.find(id).exec();
     return orders;
   }
 }

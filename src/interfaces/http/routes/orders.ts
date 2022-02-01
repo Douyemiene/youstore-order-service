@@ -4,7 +4,7 @@ import { OrderController } from "../controllers/orderController";
 
 const OrderRouter = Router();
 
-OrderRouter.post("/orders/", (req: Request, res: Response) =>
+OrderRouter.post("/orders", (req: Request, res: Response) =>
   OrderController.createOrder(req, res)
 );
 
