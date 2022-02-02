@@ -1,5 +1,5 @@
-import { Orders } from "../infra/database/models/Orders";
-import { IOrderProps } from "../domain/order";
+//import { orderRepo } from ".";
+import { IOrderProps } from "../../domain/order";
 
 export interface IOrderRepo {
   save(order: IOrderProps): Promise<string>;
@@ -11,8 +11,9 @@ export interface IOrderRepo {
 export class OrderRepo implements IOrderRepo {
   private orders: any;
 
-  constructor(model: any) {
-    this.orders = model;
+  constructor({ orderModel }: any) {
+    this.orders = orderModel;
+    console.log("in the order repol, the order model is", orderModel);
   }
 
   async save(order: IOrderProps): Promise<string> {
@@ -31,3 +32,5 @@ export class OrderRepo implements IOrderRepo {
     return orders;
   }
 }
+
+export default OrderRepo;

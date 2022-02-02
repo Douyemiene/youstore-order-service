@@ -1,10 +1,15 @@
 import express from "express";
+import container from "../../../di-setup";
+//const { setup, container } = require("../../../di-setup");
 //Persistence
 import { connectDB } from "../../../infra/database/mongoose";
 
-//Subdomains
+//routers
 import { OrderRouter } from "./orders";
 
+// console.log("myC", container.cradle.orderModel);
+// console.log("myC", container.cradle.orderUseCase);
+//const myController = container.resolve("myController");
 connectDB();
 const app = express();
 

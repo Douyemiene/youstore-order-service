@@ -1,11 +1,11 @@
-import { IOrderRepo } from "../repos/orders";
+import { IOrderRepo } from "../infra/repositories/orders";
 import { IOrderProps, Order } from "../domain/order";
 
 export class OrderUsecase {
-  private orderRepo: IOrderRepo;
+  private orderRepo: any;
 
-  constructor(orderRepo: IOrderRepo) {
-    this.orderRepo = orderRepo;
+  constructor({ orders }: any) {
+    this.orderRepo = orders;
   }
 
   async createOrder(order: IOrderProps): Promise<string> {
@@ -19,3 +19,5 @@ export class OrderUsecase {
     return orders;
   }
 }
+
+export default OrderUsecase;
