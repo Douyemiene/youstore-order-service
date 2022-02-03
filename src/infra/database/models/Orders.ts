@@ -1,5 +1,10 @@
 import * as mongoose from "mongoose";
 
+interface Product {
+  name: string;
+  quantity: number;
+}
+
 interface Order {
   id: string;
   orderStatus: boolean;
@@ -9,12 +14,17 @@ interface Order {
   orderDate: string;
 }
 
+const ProductSchema = new mongoose.Schema<Product>({
+  name: String,
+  quantity: Number,
+});
+
 const OrderSchema = new mongoose.Schema<Order>({
   id: String,
   orderStatus: Boolean,
   total: Number,
   customerId: String,
-  products: [String],
+  products: [ProductSchema],
   orderDate: String,
 });
 
