@@ -9,6 +9,7 @@ import {
 import Orders from "./infra/database/models/Orders";
 import { connectDB } from "./infra/database/mongoose";
 import OrderController from "./interfaces/http/controllers/orderController";
+import Messengener from "./infra/messaging/messenger";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -17,6 +18,7 @@ const container = createContainer({
 container.register({
   orderModel: asValue(Orders),
   orderController: asClass(OrderController),
+  messenger: asValue(Messengener),
   // Infrastructure layer
   connectDB: asFunction(connectDB),
 });

@@ -1,25 +1,23 @@
-import { UniqueEntityID } from "../helpers/UniqueEntityID";
-
 export interface IOrderProps {
-  id?: string;
-  customerID: string;
-  orderStatus: boolean;
+  customerId: string;
+  orderStatus?: boolean;
   total: number;
-  products: string[];
-  orderDate: string;
+  products: Array<{ name: string; quantity: number }>;
+  orderDate?: string;
 }
 
 export class Order {
   readonly props: IOrderProps;
 
   private constructor(props: IOrderProps) {
-    props.id = props.id ? props.id : new UniqueEntityID().value;
     this.props = props;
   }
 
   public static create(props: IOrderProps): Order {
-    let { orderStatus, total, products, orderDate } = props;
-    props.orderStatus = props.orderStatus ? props.orderStatus : false;
+    const today = `${new Date().getDay()}/${new Date().getMonth()}/${new Date().getFullYear()}`;
+    props.orderDate = props.orderDate ? props.orderDate : today;
+    props.orderStatus =
+      props.orderStatus == undefined ? false : props.orderStatus;
     return new Order(props);
   }
 }

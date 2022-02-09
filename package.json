@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.8.0",
     "awilix": "^6.1.0",
     "dotenv": "^14.3.0",
     "express": "^4.17.2",
@@ -19,6 +20,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.8.2",
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.8",
     "ts-node": "^10.4.0",

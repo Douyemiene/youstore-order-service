@@ -1,35 +1,33 @@
-//import { orderRepo } from ".";
+import { Model } from "mongoose";
 import { IOrderProps } from "../../domain/order";
+import { IOrder } from "../database/models/Orders";
 
 export interface IOrderRepo {
   save(order: IOrderProps): Promise<string>;
   getOrdersByCustomerId(id: string): any;
-  //   getOrderByOrderId(id: string): Promise<Order>;
-  //   exists(id: string): Promise<boolean>;
+  getOrderById(id: string): Promise<IOrder | null>;
 }
 
 export class OrderRepo implements IOrderRepo {
-  private orders: any;
+  private orders: Model<IOrder>;
 
-  constructor({ orderModel }: any) {
+  constructor({ orderModel }: { orderModel: Model<IOrder> }) {
     this.orders = orderModel;
-    console.log("in the order repol, the order model is", orderModel);
   }
 
   async save(order: IOrderProps): Promise<string> {
-    const { id } = await this.orders.create(order);
-    return id;
+    const { _id } = await this.orders.create(order);
+    return _id.toString();
   }
 
   async getOrdersByCustomerId(id: string) {
     const orders = await this.orders.find({ customerId: id }).exec();
-    console.log("repo orders", orders);
     return orders;
   }
 
-  async getOrderById(id: string) {
-    const orders = await this.orders.find(id).exec();
-    return orders;
+  async getOrderById(id: string): Promise<IOrder | null> {
+    const order = await this.orders.findById(id).exec();
+    return order;
   }
 }
 

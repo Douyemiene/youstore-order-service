@@ -5,12 +5,12 @@ interface Product {
   quantity: number;
 }
 
-interface Order {
+export interface IOrder {
   id: string;
   orderStatus: boolean;
   total: number;
   customerId: string;
-  products: string[];
+  products: Product[];
   orderDate: string;
 }
 
@@ -19,7 +19,7 @@ const ProductSchema = new mongoose.Schema<Product>({
   quantity: Number,
 });
 
-const OrderSchema = new mongoose.Schema<Order>({
+const OrderSchema = new mongoose.Schema<IOrder>({
   id: String,
   orderStatus: Boolean,
   total: Number,
@@ -28,5 +28,5 @@ const OrderSchema = new mongoose.Schema<Order>({
   orderDate: String,
 });
 
-export const Orders = mongoose.model<Order>("Order", OrderSchema);
+export const Orders = mongoose.model<IOrder>("Order", OrderSchema);
 export default Orders;
