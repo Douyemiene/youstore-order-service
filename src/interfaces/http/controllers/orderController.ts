@@ -63,6 +63,16 @@ export class OrderController {
       res.status(400).json({ success: false, err: err });
     }
   }
+
+  async findByIdAndUpdate(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    try {
+      const order = await this.orderUseCase.findByIdAndUpdate(id);
+      res.status(200).json({ success: true, data: order });
+    } catch (err) {
+      res.status(400).json({ success: false, err: err });
+    }
+  }
 }
 
 export default OrderController;

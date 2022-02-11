@@ -19,4 +19,8 @@ OrderRouter.get("/customer/:id", (req: Request, res: Response) =>
   orderController.getOrdersfromCustomer(req, res)
 );
 
+OrderRouter.get("/hey/:id", (req: Request, res: Response) =>
+  orderController.findByIdAndUpdate(req, res)
+);
+
 export { OrderRouter };

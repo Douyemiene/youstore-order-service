@@ -27,6 +27,11 @@ export class OrderUsecase {
     const order = await this.orderRepo.getOrderById(id);
     return order;
   }
+
+  async findByIdAndUpdate(id: string): Promise<void> {
+    console.log("update uscase");
+    const order = await this.orderRepo.findByIdAndUpdate(id);
+  }
 }
 
 export default OrderUsecase;
