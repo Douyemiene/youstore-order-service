@@ -4,7 +4,7 @@ import { IOrder } from "../database/models/Orders";
 
 export interface IOrderRepo {
   save(order: IOrderProps): Promise<string>;
-  getOrdersByCustomerId(id: string): any;
+  getOrdersByCustomerId(id: string): Promise<Array<IOrder>>;
   getOrderById(id: string): Promise<IOrder | null>;
 }
 
@@ -20,7 +20,7 @@ export class OrderRepo implements IOrderRepo {
     return _id.toString();
   }
 
-  async getOrdersByCustomerId(id: string) {
+  async getOrdersByCustomerId(id: string): Promise<Array<IOrder>> {
     const orders = await this.orders.find({ customerId: id }).exec();
     return orders;
   }

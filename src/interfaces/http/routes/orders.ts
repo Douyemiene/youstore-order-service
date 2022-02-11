@@ -7,15 +7,15 @@ const { orderController } = container.cradle;
 
 const OrderRouter = Router();
 
-OrderRouter.post("/orders", (req: Request, res: Response) =>
+OrderRouter.post("/", (req: Request, res: Response) =>
   orderController.createOrder(req, res)
 );
 
-OrderRouter.get("/orders/:id", (req: Request, res: Response) =>
+OrderRouter.get("/:id", (req: Request, res: Response) =>
   orderController.getOrderById(req, res)
 );
 
-OrderRouter.get("/orders/customer/:id", (req: Request, res: Response) =>
+OrderRouter.get("/customer/:id", (req: Request, res: Response) =>
   orderController.getOrdersfromCustomer(req, res)
 );
 

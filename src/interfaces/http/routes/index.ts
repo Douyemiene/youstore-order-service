@@ -8,7 +8,7 @@ const { messenger } = container.cradle;
 const app = express();
 
 app.use(express.json());
-app.use(OrderRouter);
+app.use("/orders", OrderRouter);
 
 const PORT = process.env.PORT || 5000;
 
