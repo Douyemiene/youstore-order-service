@@ -9,7 +9,8 @@ import {
 import Orders from "./infra/database/models/Orders";
 import { connectDB } from "./infra/database/mongoose";
 import OrderController from "./interfaces/http/controllers/orderController";
-import Messengener from "./infra/messaging/messenger";
+import Messenger from "./infra/messaging/messenger";
+//import { Server } from "./interfaces/http/routes/index";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -18,9 +19,10 @@ const container = createContainer({
 container.register({
   orderModel: asValue(Orders),
   orderController: asClass(OrderController),
-  messenger: asValue(Messengener),
+  messenger: asClass(Messenger, { lifetime: Lifetime.SINGLETON }),
   // Infrastructure layer
   connectDB: asFunction(connectDB),
+  //server: asClass(Server),
 });
 
 //load repositories

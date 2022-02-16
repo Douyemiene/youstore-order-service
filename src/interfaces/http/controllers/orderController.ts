@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { IMessagener } from "../../../infra/messaging/messenger";
+import { IMessenger } from "../../../infra/messaging/messenger";
 import OrderUseCase from "../../../usecases/OrderUseCase";
 
 export class OrderController {
   orderUseCase: OrderUseCase;
-  messenger: IMessagener;
+  messenger: IMessenger;
 
   constructor({
     orderUseCase,
     messenger,
   }: {
     orderUseCase: OrderUseCase;
-    messenger: IMessagener;
+    messenger: IMessenger;
   }) {
     this.orderUseCase = orderUseCase;
     this.messenger = messenger;
@@ -28,14 +28,12 @@ export class OrderController {
       products: Array<{ name: string; quantity: number }>;
     } = req.body;
     try {
-      //console.log("message", this.messenger);
-
       const orderID = await this.orderUseCase.createOrder({
         customerId,
         total,
         products,
       });
-      this.messenger.assertQueue("order_created");
+      //this.messenger.assertQueue("order_created");
       this.messenger.sendToQueue("order_created", { orderID });
       res.status(201).json({ success: true, data: { id: orderID } });
     } catch (err) {
@@ -64,10 +62,14 @@ export class OrderController {
     }
   }
 
-  async findByIdAndUpdate(req: Request, res: Response): Promise<void> {
+  async findByIdAndUpdateStatus(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
+    const { orderStatus } = req.body;
     try {
-      const order = await this.orderUseCase.findByIdAndUpdate(id);
+      const order = await this.orderUseCase.findByIdAndUpdateStatus(
+        id,
+        orderStatus
+      );
       res.status(200).json({ success: true, data: order });
     } catch (err) {
       res.status(400).json({ success: false, err: err });

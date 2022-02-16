@@ -28,9 +28,12 @@ export class OrderUsecase {
     return order;
   }
 
-  async findByIdAndUpdate(id: string): Promise<void> {
+  async findByIdAndUpdateStatus(
+    id: string,
+    orderStatus: boolean
+  ): Promise<void> {
     console.log("update uscase");
-    const order = await this.orderRepo.findByIdAndUpdate(id);
+    const order = await this.orderRepo.findByIdAndUpdate(id, orderStatus);
   }
 }
 

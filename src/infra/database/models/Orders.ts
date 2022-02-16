@@ -7,7 +7,7 @@ interface Product {
 
 export interface IOrder {
   id: string;
-  orderStatus: boolean;
+  orderStatus: boolean | null;
   total: number;
   customerId: string;
   products: Product[];

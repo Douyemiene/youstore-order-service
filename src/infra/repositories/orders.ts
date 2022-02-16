@@ -6,7 +6,7 @@ export interface IOrderRepo {
   save(order: IOrderProps): Promise<string>;
   getOrdersByCustomerId(id: string): Promise<Array<IOrder>>;
   getOrderById(id: string): Promise<IOrder | null>;
-  findByIdAndUpdate(id: string): Promise<void>;
+  findByIdAndUpdate(id: string, orderStatus: boolean): Promise<void>;
 }
 
 export class OrderRepo implements IOrderRepo {
@@ -17,6 +17,7 @@ export class OrderRepo implements IOrderRepo {
   }
 
   async save(order: IOrderProps): Promise<string> {
+    order.orderStatus = null;
     const { _id } = await this.orders.create(order);
     return _id.toString();
   }
@@ -31,15 +32,14 @@ export class OrderRepo implements IOrderRepo {
     return order;
   }
 
-  async findByIdAndUpdate(id: string): Promise<void> {
+  async findByIdAndUpdate(id: string, orderStatus: boolean): Promise<void> {
     const order = await this.orders.findByIdAndUpdate(
       id,
       {
-        orderStatus: true,
+        orderStatus,
       },
       { new: true }
     );
-    console.log("findUpd", order);
   }
 }
 

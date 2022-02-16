@@ -1,6 +1,6 @@
 export interface IOrderProps {
   customerId: string;
-  orderStatus?: boolean;
+  orderStatus?: boolean | null;
   total: number;
   products: Array<{ name: string; quantity: number }>;
   orderDate?: string;
@@ -14,10 +14,11 @@ export class Order {
   }
 
   public static create(props: IOrderProps): Order {
-    const today = `${new Date().getDay()}/${new Date().getMonth()}/${new Date().getFullYear()}`;
+    const newDate = new Date();
+    const today = `${newDate.getDate()}/${
+      newDate.getMonth() + 1
+    }/${newDate.getFullYear()}`;
     props.orderDate = props.orderDate ? props.orderDate : today;
-    props.orderStatus =
-      props.orderStatus == undefined ? false : props.orderStatus;
     return new Order(props);
   }
 }
