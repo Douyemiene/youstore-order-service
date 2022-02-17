@@ -57,8 +57,8 @@ export class OrderController {
     try {
       const order = await this.orderUseCase.getOrderById(id);
       res.status(200).json({ success: true, data: order });
-    } catch (err) {
-      res.status(400).json({ success: false, err: err });
+    } catch ({ name, message }) {
+      res.status(400).json({ success: false, error: name, message: message });
     }
   }
 
