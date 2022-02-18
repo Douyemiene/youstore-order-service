@@ -1,25 +1,29 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-interface Req extends Request {
-  user: string | jwt.JwtPayload;
-}
+// interface Req extends Request {
+//   id: string | jwt.JwtPayload;
+// }
 
-export const verifyCustomer = (req: Req, res: Response, next: NextFunction) => {
-  const token = req.header("auth-token");
-  if (!token) throw new Error(`Access Denied!`);
+export const verifyCustomer = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token: string | undefined = req.header("auth-token");
+  if (!token) res.status(401).json({ message: "invalid token" });
+  else {
+    const secret = process.env.CUSTOMER_JWT_SECRET;
 
-  const secret = process.env.CUSTOMER_JWT_SECRET;
-
-  try {
-    // verify token and save customer Id to the verified variable
-    const verified = jwt.verify(token, `${secret}`);
-    req.user = verified;
-    next();
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`${error.message}`);
+    try {
+      // verify token and save customer Id to the verified variable
+      jwt.verify(token, `${secret}`);
+      next();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`${error.message}`);
+      }
+      throw error;
     }
-    throw error;
   }
 };

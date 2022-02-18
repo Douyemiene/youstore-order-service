@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import {
   validateCreateOrder,
   validateGetOrderById,
@@ -7,10 +7,17 @@ import {
 
 // import { OrderController } from "../controllers/orderController";
 import container from "../../../di-setup";
+import { verifyCustomer } from "../../../middlewares";
 
 const { orderController } = container.cradle;
 
 const OrderRouter = Router();
+
+// interface Req extends Request {
+//   id: string | jwt.JwtPayload;
+// }
+
+OrderRouter.use(verifyCustomer);
 
 OrderRouter.post("/", validateCreateOrder, (req: Request, res: Response) =>
   orderController.createOrder(req, res)
