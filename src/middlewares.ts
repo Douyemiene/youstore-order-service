@@ -17,7 +17,7 @@ export const verifyCustomer = (
 
     try {
       // verify token and save customer Id to the verified variable
-      jwt.verify(token, `${secret}`);
+      const payload = jwt.verify(token, `${secret}`);
       next();
     } catch (error) {
       if (error instanceof Error) {

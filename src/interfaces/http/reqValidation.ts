@@ -45,6 +45,7 @@ export const sendBadRequestErrorResponse = (
     res.status(400).json({
       error: `bad request ${e.type}`,
       msg,
+      err: err,
     });
   } else {
     res.status(500).end("internal server error");

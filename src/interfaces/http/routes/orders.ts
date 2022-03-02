@@ -19,9 +19,10 @@ const OrderRouter = Router();
 
 OrderRouter.use(verifyCustomer);
 
-OrderRouter.post("/", validateCreateOrder, (req: Request, res: Response) =>
-  orderController.createOrder(req, res)
-);
+OrderRouter.post("/", validateCreateOrder, (req: Request, res: Response) => {
+  console.log("here", req);
+  orderController.createOrder(req, res);
+});
 
 OrderRouter.get("/:id", validateGetOrderById, (req: Request, res: Response) =>
   orderController.getOrderById(req, res)

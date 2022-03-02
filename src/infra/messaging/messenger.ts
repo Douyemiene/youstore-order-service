@@ -33,21 +33,30 @@ export class Messenger implements IMessenger {
   }
 
   async consumePaymentSuccess() {
-    this.channel.consume("payment_success", (msg: Message | null) => {
-      if (msg) {
-        const id = JSON.parse(msg.content.toString());
-        this.orderUseCase.findByIdAndUpdateStatus(id, true);
-      }
-    });
+    this.channel.consume(
+      "payment_success",
+      (msg: Message | null) => {
+        if (msg) {
+          const data = JSON.parse(msg.content.toString());
+          console.log("data", data.ref);
+          this.orderUseCase.findByIdAndUpdateStatus(data.ref, true);
+        }
+      },
+      { noAck: true }
+    );
   }
 
   async consumePaymentFailure() {
-    this.channel.consume("payment_failure", (msg: Message | null) => {
-      if (msg) {
-        const id = JSON.parse(msg.content.toString());
-        this.orderUseCase.findByIdAndUpdateStatus(id, false);
-      }
-    });
+    this.channel.consume(
+      "payment_failure",
+      (msg: Message | null) => {
+        if (msg) {
+          const id = JSON.parse(msg.content.toString());
+          this.orderUseCase.findByIdAndUpdateStatus(id, false);
+        }
+      },
+      { noAck: true }
+    );
   }
 }
 

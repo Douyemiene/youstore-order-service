@@ -32,7 +32,6 @@ export class OrderUsecase {
     id: string,
     orderStatus: boolean
   ): Promise<void> {
-    console.log("update uscase");
     const order = await this.orderRepo.findByIdAndUpdate(id, orderStatus);
   }
 }
