@@ -47,6 +47,7 @@ export const sendBadRequestErrorResponse = (
     }
 
     res.status(400).json({
+      success: false,
       error: `bad request ${e.type}`,
       msg,
     });

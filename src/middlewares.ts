@@ -20,10 +20,7 @@ export const verifyCustomer = (
       const payload = jwt.verify(token, `${secret}`);
       next();
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`${error.message}`);
-      }
-      throw error;
+      res.status(401).json({ message: "unauthorised" });
     }
   }
 };
