@@ -52,10 +52,14 @@ export class Messenger implements IMessenger {
   async consumePaymentFailure() {
     this.channel.consume(
       "payment_failure",
-      (msg: Message | null) => {
+      async (msg: Message | null) => {
         if (msg) {
-          const id = JSON.parse(msg.content.toString());
-          this.orderUseCase.findByIdAndUpdateStatus(id, false);
+          const data = JSON.parse(msg.content.toString());
+          await this.orderUseCase.findByIdAndUpdateStatus(data.ref, false);
+          console.log("data.ref", data.ref);
+          const order = await this.orderUseCase.getOrderById(data.ref);
+          this.assertQueue("order_failed");
+          this.sendToQueue("order_failed", { order });
         }
       },
       { noAck: true }
