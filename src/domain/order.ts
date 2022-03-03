@@ -2,7 +2,8 @@ export interface IOrderProps {
   customerId: string;
   orderStatus?: boolean | null;
   total: number;
-  products: Array<{ name: string; quantity: number }>;
+  customerEmail: string;
+  products: Array<{ name: string; id: string; quantity: number }>;
   orderDate?: string;
 }
 

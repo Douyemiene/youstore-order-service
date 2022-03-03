@@ -11,7 +11,7 @@ export const verifyCustomer = (
   next: NextFunction
 ) => {
   const token: string | undefined = req.header("auth-token");
-  if (!token) res.status(401).json({ message: "invalid token" });
+  if (!token) res.status(401).json({ message: "unauthorised" });
   else {
     const secret = process.env.CUSTOMER_JWT_SECRET;
 

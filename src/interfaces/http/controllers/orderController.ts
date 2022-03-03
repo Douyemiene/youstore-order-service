@@ -20,16 +20,19 @@ export class OrderController {
   async createOrder(req: Request, res: Response): Promise<void> {
     const {
       customerId,
+      customerEmail,
       total,
       products,
     }: {
       customerId: string;
+      customerEmail: string;
       total: number;
-      products: Array<{ name: string; quantity: number }>;
+      products: Array<{ name: string; id: string; quantity: number }>;
     } = req.body;
     try {
       const orderID = await this.orderUseCase.createOrder({
         customerId,
+        customerEmail,
         total,
         products,
       });

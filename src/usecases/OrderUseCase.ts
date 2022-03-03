@@ -10,9 +10,6 @@ export class OrderUsecase {
   }
 
   async createOrder(order: IOrderProps): Promise<string> {
-    if (!order.customerId) {
-      throw new Error();
-    }
     const orderToSave = Order.create(order).props;
     const id = this.orderRepo.save(orderToSave);
     return id;
@@ -32,7 +29,7 @@ export class OrderUsecase {
     id: string,
     orderStatus: boolean
   ): Promise<void> {
-    const order = await this.orderRepo.findByIdAndUpdate(id, orderStatus);
+    await this.orderRepo.findByIdAndUpdate(id, orderStatus);
   }
 }
 

@@ -9,10 +9,12 @@ const validator = require("express-joi-validation").createValidator({
 export const validateCreateOrder = validator.body(
   joi.object({
     customerId: joi.string().required(),
+    customerEmail: joi.string().required(),
     total: joi.number().required(),
     products: joi.array().items(
       joi.object({
         name: joi.string(),
+        id: joi.string(),
         quantity: joi.number(),
       })
     ),
@@ -34,10 +36,12 @@ export const sendBadRequestErrorResponse = (
     let msg = "";
     if (e.error) {
       e.error.details.forEach((d, idx) => {
-        if (idx == e.error.details.length - 1 && idx != 1) {
-          msg += ` and ${d.message}`;
+        //let formatedMsg = "";
+        let formattedMsg = d.message;
+        if (idx == e.error.details.length - 1 && idx != 0) {
+          msg += ` and ${formattedMsg}`;
         } else {
-          msg += `${d.message},`;
+          msg += `${formattedMsg},`;
         }
       });
     }
@@ -45,7 +49,6 @@ export const sendBadRequestErrorResponse = (
     res.status(400).json({
       error: `bad request ${e.type}`,
       msg,
-      err: err,
     });
   } else {
     res.status(500).end("internal server error");
