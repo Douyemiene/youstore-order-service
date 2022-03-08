@@ -37,7 +37,7 @@ export class OrderController {
         products,
       });
       this.messenger.assertQueue("order_created");
-      this.messenger.sendToQueue("order_created", { orderID });
+      this.messenger.sendToQueue("order_created", { orderID, amount: total });
       res.status(201).json({ success: true, data: { id: orderID } });
     } catch (err) {
       res.status(400).json({ success: false });
