@@ -1,6 +1,12 @@
+export enum Status {
+  PENDING = "Pending",
+  SUCCESS = "Success",
+  FAILURE = "Failure",
+}
+
 export interface IOrderProps {
   customerId: string;
-  orderStatus?: boolean | null;
+  orderStatus?: Status;
   total: number;
   customerEmail: string;
   products: Array<{ name: string; id: string; quantity: number }>;

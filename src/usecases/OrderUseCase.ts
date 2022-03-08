@@ -1,5 +1,5 @@
 import { IOrderRepo } from "../infra/repositories/orders";
-import { IOrderProps, Order } from "../domain/order";
+import { IOrderProps, Order, Status } from "../domain/order";
 import { IOrder } from "../infra/database/models/Orders";
 
 export class OrderUsecase {
@@ -27,7 +27,7 @@ export class OrderUsecase {
 
   async findByIdAndUpdateStatus(
     id: string,
-    orderStatus: boolean
+    orderStatus: Status
   ): Promise<void> {
     await this.orderRepo.findByIdAndUpdate(id, orderStatus);
   }

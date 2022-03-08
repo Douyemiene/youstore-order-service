@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { Status } from "../../../domain/order";
 
 interface Product {
   name: string;
@@ -8,7 +9,7 @@ interface Product {
 
 export interface IOrder {
   id: string;
-  orderStatus: boolean | null;
+  orderStatus: Status;
   total: number;
   customerId: string;
   customerEmail: string;
@@ -24,7 +25,7 @@ const ProductSchema = new mongoose.Schema<Product>({
 
 const OrderSchema = new mongoose.Schema<IOrder>({
   id: String,
-  orderStatus: Boolean,
+  orderStatus: String,
   total: Number,
   customerId: String,
   customerEmail: String,

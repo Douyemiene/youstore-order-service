@@ -1,12 +1,12 @@
 import { Model } from "mongoose";
-import { IOrderProps } from "../../domain/order";
+import { IOrderProps, Status } from "../../domain/order";
 import { IOrder } from "../database/models/Orders";
 
 export interface IOrderRepo {
   save(order: IOrderProps): Promise<string>;
   getOrdersByCustomerId(id: string): Promise<Array<IOrder>>;
   getOrderById(id: string): Promise<IOrder | null>;
-  findByIdAndUpdate(id: string, orderStatus: boolean): Promise<void>;
+  findByIdAndUpdate(id: string, orderStatus: Status): Promise<void>;
 }
 
 export class OrderRepo implements IOrderRepo {
@@ -17,7 +17,7 @@ export class OrderRepo implements IOrderRepo {
   }
 
   async save(order: IOrderProps): Promise<string> {
-    order.orderStatus = null;
+    order.orderStatus = Status.PENDING;
     const { _id } = await this.orders.create(order);
     return _id.toString();
   }
@@ -32,7 +32,7 @@ export class OrderRepo implements IOrderRepo {
     return order;
   }
 
-  async findByIdAndUpdate(id: string, orderStatus: boolean): Promise<void> {
+  async findByIdAndUpdate(id: string, orderStatus: Status): Promise<void> {
     const order = await this.orders.findByIdAndUpdate(
       id,
       {
