@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IMessenger } from "../../../infra/messaging/messenger";
 import OrderUseCase from "../../../usecases/OrderUseCase";
+const axios = require("axios").default;
 
 export class OrderController {
   orderUseCase: OrderUseCase;
@@ -29,19 +30,55 @@ export class OrderController {
       total: number;
       products: Array<{ name: string; id: string; quantity: number }>;
     } = req.body;
+    let availableResponse = null;
     try {
-      const orderID = await this.orderUseCase.createOrder({
-        customerId,
-        customerEmail,
-        total,
-        products,
-      });
-      this.messenger.assertQueue("order_created");
-      this.messenger.sendToQueue("order_created", { orderID, amount: total });
-      res.status(201).json({ success: true, data: { id: orderID } });
+      availableResponse = await axios.post(
+        `https://youstore-products.herokuapp.com/v1/products/available`,
+        {
+          order: req.body,
+        },
+        {
+          headers: {
+            authorization:
+              "Bearer sk_test_55ceccf870fc585f49df71a6decd01ff457c583c",
+            "content-type": "application/json",
+            "cache-control": "no-cache",
+          },
+        }
+      );
+
+      if (availableResponse.data.outOfStock.length == 0) {
+        const orderID = await this.orderUseCase.createOrder({
+          customerId,
+          customerEmail,
+          total,
+          products,
+        });
+        this.messenger.assertQueue("order_created");
+        this.messenger.sendToQueue("order_created", {
+          orderID,
+          amount: total,
+        });
+        res.status(201).json({
+          success: true,
+          message: "Order created successfully",
+          data: { id: orderID },
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: "some of the products are not available",
+          data: { unavailable: availableResponse.data.outOfStock },
+        });
+      }
     } catch (err) {
-      res.status(400).json({ success: false });
+      res.status(400).json({ success: false, data: [] });
     }
+    // try {
+
+    // } catch (err) {
+    //   res.status(400).json({ success: false });
+    // }
   }
 
   async getOrdersfromCustomer(req: Request, res: Response): Promise<void> {
