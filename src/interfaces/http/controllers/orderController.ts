@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { IMessenger } from "../../../infra/messaging/messenger";
 import OrderUseCase from "../../../usecases/OrderUseCase";
+import {Status} from "../../../domain/order"
 const axios = require("axios").default;
+
 
 export class OrderController {
   orderUseCase: OrderUseCase;
@@ -28,7 +30,7 @@ export class OrderController {
       customerId: string;
       customerEmail: string;
       total: number;
-      products: Array<{ name: string; id: string; quantity: number }>;
+      products: Array<{ name: string; id: string; quantity: number}>;
     } = req.body;
     let availableResponse = null;
     try {
@@ -59,6 +61,21 @@ export class OrderController {
           orderID,
           amount: total,
         });
+        //set timeout for order
+      setTimeout(async () => {
+        const order = await this.orderUseCase.getOrderById(orderID);
+        if(order){
+          if(order.orderStatus == Status.PENDING) {
+            console.log('pending')
+            await this.orderUseCase.findByIdAndUpdateStatus(orderID, Status.FAILURE)
+            this.messenger.assertQueue("order_failed");
+            this.messenger.sendToQueue("order_failed", { order });
+          }
+        }
+        //console.log('order timeout',order)
+      },3600000)
+
+      //response
         res.status(201).json({
           success: true,
           message: "Order created successfully",
@@ -71,14 +88,12 @@ export class OrderController {
           data: { unavailable: availableResponse.data.outOfStock },
         });
       }
+
+      
     } catch (err) {
       res.status(400).json({ success: false, data: [] });
     }
-    // try {
-
-    // } catch (err) {
-    //   res.status(400).json({ success: false });
-    // }
+    
   }
 
   async getOrdersfromCustomer(req: Request, res: Response): Promise<void> {
