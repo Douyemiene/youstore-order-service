@@ -5,6 +5,9 @@ import container from "../../../di-setup";
 
 const app = express();
 app.use(express.json());
+app.get('/', (req,res)=> {
+  res.json({message: 'Make your orders with this API'})
+})
 app.use("/orders", OrderRouter);
 
 const { messenger } = container.cradle;
