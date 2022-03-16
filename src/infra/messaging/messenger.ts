@@ -24,11 +24,15 @@ export class Messenger implements IMessenger {
 
     this.channel = await connection.createChannel();
   }
+
+  
   async assertQueue(queue: string): Promise<void> {
     await this.channel.assertQueue(queue, {
       durable: false,
     });
   }
+
+
   sendToQueue(queue: string, content: Object): void {
     this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(content)));
   }

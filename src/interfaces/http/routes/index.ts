@@ -2,8 +2,10 @@ import express from "express";
 import { connectDB } from "../../../infra/database/mongoose";
 import { OrderRouter } from "./orders";
 import container from "../../../di-setup";
+import cors from "cors"
 
 const app = express();
+app.use(cors({ origin: '*'}))
 app.use(express.json());
 app.get('/', (req,res)=> {
   res.json({message: 'Make your orders with this API'})
@@ -16,8 +18,6 @@ messenger.createChannel().then(() => {
   //connect database
   connectDB();
   //consume events
-  // messenger.assertQueue("payment_success");
-  // messenger.assertQueue("payment_failure");
   messenger.consumePaymentSuccess();
   messenger.consumePaymentFailure();
   //listen for requests
