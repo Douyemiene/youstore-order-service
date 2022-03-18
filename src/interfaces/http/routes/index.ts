@@ -5,13 +5,15 @@ import container from "../../../di-setup";
 import cors from "cors"
 
 const app = express();
+
 app.use(cors({ origin: '*'}))
+
 app.use(express.json());
 app.get('/', (req,res)=> {
   res.json({message: 'Make your orders with this API'})
 })
 
-app.use("/", OrderRouter);
+app.use("/", cors(), OrderRouter);
 
 const { messenger } = container.cradle;
 
