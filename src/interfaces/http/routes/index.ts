@@ -10,7 +10,8 @@ app.use(express.json());
 app.get('/', (req,res)=> {
   res.json({message: 'Make your orders with this API'})
 })
-app.use("/orders", OrderRouter);
+
+app.use("/", OrderRouter);
 
 const { messenger } = container.cradle;
 
