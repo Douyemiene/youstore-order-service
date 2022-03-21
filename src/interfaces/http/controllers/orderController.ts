@@ -30,7 +30,7 @@ export class OrderController {
       customerId: string;
       customerEmail: string;
       total: number;
-      products: Array<{ name: string; id: string; quantity: number}>;
+      products: Array<{ name: string; id: string; quantity: number, price: number }>;
     } = req.body;
     let availableResponse = null;
     try {

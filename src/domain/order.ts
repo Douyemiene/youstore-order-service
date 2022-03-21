@@ -9,7 +9,7 @@ export interface IOrderProps {
   orderStatus?: Status;
   total: number;
   customerEmail: string;
-  products: Array<{ name: string; id: string; quantity: number }>;
+  products: Array<{ name: string; id: string; quantity: number, price: number }>;
   orderDate?: string;
 }
 
