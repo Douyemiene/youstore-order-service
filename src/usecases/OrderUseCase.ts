@@ -15,8 +15,8 @@ export class OrderUsecase {
     return id;
   }
 
-  async getOrdersfromCustomer(id: string): Promise<IOrder[]> {
-    const orders = await this.orderRepo.getOrdersByCustomerId(id);
+  async getOrdersfromCustomer(id: string, limit:number,skip:number): Promise<IOrder[]> {
+    const orders = await this.orderRepo.getOrdersByCustomerId(id,limit,skip);
     return orders;
   }
 

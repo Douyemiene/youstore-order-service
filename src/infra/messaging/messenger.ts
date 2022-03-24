@@ -62,13 +62,13 @@ export class Messenger implements IMessenger {
       "payment_failure",
       async (msg: Message | null) => {
         if (msg) {
-          console.log(" before data.ref");
+
           const data = JSON.parse(msg.content.toString());
           await this.orderUseCase.findByIdAndUpdateStatus(
             data.ref,
             Status.FAILURE
           );
-          console.log("data.ref", data.ref);
+        
           const order = await this.orderUseCase.getOrderById(data.ref);
           this.assertQueue("order_failed");
           this.sendToQueue("order_failed", { order });

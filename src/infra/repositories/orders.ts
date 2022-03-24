@@ -4,7 +4,7 @@ import { IOrder } from "../database/models/Orders";
 
 export interface IOrderRepo {
   save(order: IOrderProps): Promise<string>;
-  getOrdersByCustomerId(id: string): Promise<Array<IOrder>>;
+  getOrdersByCustomerId(id: string, limit: number, skip:number): Promise<Array<IOrder>>;
   getOrderById(id: string): Promise<IOrder | null>;
   findByIdAndUpdate(id: string, orderStatus: Status): Promise<void>;
 }
@@ -22,8 +22,8 @@ export class OrderRepo implements IOrderRepo {
     return _id.toString();
   }
 
-  async getOrdersByCustomerId(id: string): Promise<Array<IOrder>> {
-    const orders = await this.orders.find({ customerId: id }).exec();
+  async getOrdersByCustomerId(id: string, limit: number, skip:number): Promise<Array<IOrder>> {
+    const orders = await this.orders.find({ customerId: id }).limit(limit).skip(skip);
     return orders;
   }
 

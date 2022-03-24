@@ -67,13 +67,13 @@ export class OrderController {
         const order = await this.orderUseCase.getOrderById(orderID);
         if(order){
           if(order.orderStatus == Status.PENDING) {
-            console.log('pending')
+           
             await this.orderUseCase.findByIdAndUpdateStatus(orderID, Status.FAILURE)
             this.messenger.assertQueue("order_failed");
             this.messenger.sendToQueue("order_failed", { order });
           }
         }
-        //console.log('order timeout',order)
+
       },3600000)
 
       //response
@@ -99,9 +99,20 @@ export class OrderController {
 
   async getOrdersfromCustomer(req: Request, res: Response): Promise<void> {
     const customerID = req.params.id;
-
+    let page ='1'
+    let size = '10'
+     if(req.query.page){
+      page = req.query.page.toString();
+    }
+    if(req.query.size){
+      size = req.query.size.toString();
+    }
     try {
-      const order = await this.orderUseCase.getOrdersfromCustomer(customerID);
+      let pageInt = parseInt(page)
+      let sizeInt = parseInt(size)
+      const limit = parseInt(size)
+      const skip = (pageInt - 1) * sizeInt
+      const order = await this.orderUseCase.getOrdersfromCustomer(customerID,limit,skip);
       res.status(200).json({ success: true, data: order });
     } catch (err) {
       res.status(200).json({ success: false, data: [] });
