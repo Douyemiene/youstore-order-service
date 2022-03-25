@@ -16,7 +16,10 @@ export const validateCreateOrder = validator.body(
         name: joi.string(),
         id: joi.string(),
         quantity: joi.number(),
-        price: joi.number()
+        price: joi.number(),
+        size: joi.string(),
+        color: joi.string(),
+        image: joi.string(),
       })
     ),
   })
