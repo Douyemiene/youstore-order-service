@@ -39,7 +39,8 @@ const OrderSchema = new mongoose.Schema<IOrder>({
   customerEmail: String,
   products: [ProductSchema],
   orderDate: String,
-});
+},
+{timestamps: true});
 
 export const Orders = mongoose.model<IOrder>("Order", OrderSchema);
 export default Orders;

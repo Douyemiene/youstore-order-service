@@ -23,7 +23,7 @@ export class OrderRepo implements IOrderRepo {
   }
 
   async getOrdersByCustomerId(id: string, limit: number, skip:number): Promise<Array<IOrder>> {
-    const orders = await this.orders.find({ customerId: id }).limit(limit).skip(skip);
+    const orders = await this.orders.find({ customerId: id }).sort({createdAt:-1}).limit(limit).skip(skip);
     return orders;
   }
 
