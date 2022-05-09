@@ -4,15 +4,24 @@ export enum Status {
   FAILURE = "Failure",
 }
 
+export enum DeliveryStatus {
+  NOT_INITIATED = "Not Initalized",
+  INIT = "Initiated",
+  DELIVERED = "Delivered",
+  FAILURE = "Failure",
+}
+
 export interface IOrderProps {
   customerId: string;
   orderStatus?: Status;
+  orderDate?: string;
+  deliveryStatus?: DeliveryStatus;
   total: number;
   customerEmail: string;
   products: Array<{ name: string; id: string; quantity: number, price: number, size: string;
     color: string,
     image: string}>;
-  orderDate?: string;
+  
 }
 
 export class Order {

@@ -101,6 +101,7 @@ export class OrderController {
 
   async getOrdersfromCustomer(req: Request, res: Response): Promise<void> {
     const customerID = req.params.id;
+    //should be in done in model
     let page ='1'
     let size = '10'
      if(req.query.page){
@@ -113,6 +114,7 @@ export class OrderController {
       let pageInt = parseInt(page)
       let sizeInt = parseInt(size)
       const limit = parseInt(size)
+
       const skip = (pageInt - 1) * sizeInt
       const order = await this.orderUseCase.getOrdersfromCustomer(customerID,limit,skip);
       res.status(200).json({ success: true, data: order });

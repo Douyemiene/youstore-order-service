@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { IOrderProps, Status } from "../../domain/order";
+import { DeliveryStatus, IOrderProps, Status } from "../../domain/order";
 import { IOrder } from "../database/models/Orders";
 
 export interface IOrderRepo {
@@ -18,6 +18,7 @@ export class OrderRepo implements IOrderRepo {
 
   async save(order: IOrderProps): Promise<string> {
     order.orderStatus = Status.PENDING;
+    order.deliveryStatus = DeliveryStatus.NOT_INITIATED
     const { _id } = await this.orders.create(order);
     return _id.toString();
   }
