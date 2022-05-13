@@ -7,6 +7,7 @@ export interface IOrderRepo {
   getOrdersByCustomerId(id: string, limit: number, skip:number): Promise<Array<IOrder>>;
   getOrderById(id: string): Promise<IOrder | null>;
   findByIdAndUpdate(id: string, orderStatus: Status): Promise<void>;
+  findByIdAndUpdateDelivery(id: string, deliveryStatus: DeliveryStatus): Promise<void>
 }
 
 export class OrderRepo implements IOrderRepo {
@@ -38,6 +39,16 @@ export class OrderRepo implements IOrderRepo {
       id,
       {
         orderStatus,
+      },
+      { new: true }
+    );
+  }
+
+  async findByIdAndUpdateDelivery(id: string, deliveryStatus: DeliveryStatus): Promise<void> {
+     await this.orders.findByIdAndUpdate(
+      id,
+      {
+        deliveryStatus,
       },
       { new: true }
     );

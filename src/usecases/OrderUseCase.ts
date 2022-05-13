@@ -1,5 +1,5 @@
 import { IOrderRepo } from "../infra/repositories/orders";
-import { IOrderProps, Order, Status } from "../domain/order";
+import { DeliveryStatus, IOrderProps, Order, Status } from "../domain/order";
 import { IOrder } from "../infra/database/models/Orders";
 
 export class OrderUsecase {
@@ -30,6 +30,13 @@ export class OrderUsecase {
     orderStatus: Status
   ): Promise<void> {
     await this.orderRepo.findByIdAndUpdate(id, orderStatus);
+  }
+
+  async findByIdAndUpdateDelivery(
+    id: string,
+    deliveryStatus: DeliveryStatus
+  ): Promise<void> {
+    await this.orderRepo.findByIdAndUpdateDelivery(id, deliveryStatus);
   }
 }
 

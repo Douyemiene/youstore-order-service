@@ -20,6 +20,45 @@ export class OrderController {
     this.messenger = messenger;
   }
 
+
+  async getOrderById(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    try {
+      const order = await this.orderUseCase.getOrderById(id);
+      res.status(200).json({ success: true, data: order });
+    } catch ({ name, message }) {
+      res.status(404).json({ success: false, data: null });
+    }
+  }
+
+  async findByIdAndUpdateStatus(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const { orderStatus } = req.body;
+    try {
+      const order = await this.orderUseCase.findByIdAndUpdateStatus(
+        id,
+        orderStatus
+      );
+      res.status(200).json({ success: true, data: order });
+    } catch (err) {
+      res.status(400).json({ success: false, err: err });
+    }
+  }
+
+  async findByIdAndUpdateDelivery(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const { deliveryStatus } = req.body;
+    try {
+      const orders = await this.orderUseCase.findByIdAndUpdateDelivery(
+        id,
+        deliveryStatus
+      );
+      res.status(200).json({ success: true, data: orders });
+    } catch (err) {
+      res.status(400).json({ success: false, err: err });
+    }
+  }
+
   async createOrder(req: Request, res: Response): Promise<void> {
     const {
       customerId,
@@ -129,29 +168,7 @@ export class OrderController {
     }
   }
 
-  async getOrderById(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-    try {
-      const order = await this.orderUseCase.getOrderById(id);
-      res.status(200).json({ success: true, data: order });
-    } catch ({ name, message }) {
-      res.status(404).json({ success: false, data: null });
-    }
-  }
 
-  async findByIdAndUpdateStatus(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-    const { orderStatus } = req.body;
-    try {
-      const order = await this.orderUseCase.findByIdAndUpdateStatus(
-        id,
-        orderStatus
-      );
-      res.status(200).json({ success: true, data: order });
-    } catch (err) {
-      res.status(400).json({ success: false, err: err });
-    }
-  }
 }
 
 export default OrderController;
