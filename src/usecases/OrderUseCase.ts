@@ -4,6 +4,7 @@ import { IOrder } from "../infra/database/models/Orders";
 
 export class OrderUsecase {
   private orderRepo: IOrderRepo;
+  
 
   constructor({ orders }: { orders: IOrderRepo }) {
     this.orderRepo = orders;
