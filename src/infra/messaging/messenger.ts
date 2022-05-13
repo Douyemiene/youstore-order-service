@@ -4,10 +4,13 @@ import OrderUseCase from "../../usecases/OrderUseCase";
 
 export interface IMessenger {
   createChannel(): Promise<void>;
+  assertExchange(exchange: string, exchangeType: string)
+  publishToExchange(exchange: string, key: string, msg: Object)
   sendToQueue(queue: string, content: Object): void;
   assertQueue(queue: string): Promise<void>;
   consumePaymentSuccess(): Promise<void>;
   consumePaymentFailure(): Promise<void>;
+  
 }
 
 export class Messenger implements IMessenger {
@@ -28,10 +31,20 @@ export class Messenger implements IMessenger {
   
   async assertQueue(queue: string): Promise<void> {
     await this.channel.assertQueue(queue, {
-      durable: false,
+      durable: true,
     });
   }
 
+
+  async assertExchange(exchange: string, exchangeType: string){
+    await this.channel.assertExchange(exchange, exchangeType, {
+      durable: true
+    });
+  }
+
+  async publishToExchange(exchange: string, key: string, msg: Object){
+    await this.channel.publish(exchange, key, Buffer.from(JSON.stringify(msg)));
+  }
 
   sendToQueue(queue: string, content: Object): void {
     this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(content)));

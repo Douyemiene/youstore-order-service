@@ -58,11 +58,17 @@ export class OrderController {
           total,
           products,
         });
-        this.messenger.assertQueue("order_created");
-        this.messenger.sendToQueue("order_created", {
+        // this.messenger.assertQueue("order_created");
+        // this.messenger.sendToQueue("order_created", {
+        //   orderID,
+        //   amount: total,
+        // });
+
+        this.messenger.assertExchange('orderEvents','topic')
+        this.messenger.publishToExchange('orderEvents', 'order.create', {
           orderID,
           amount: total,
-        });
+        })
         
         //set timeout for order
       setTimeout(async () => {
