@@ -26,6 +26,7 @@ export class Messenger implements IMessenger {
     const connection: Connection = await amqp.connect(amqp_url);
 
     this.channel = await connection.createChannel();
+    await this.assertExchange('orderEvents','topic')
   }
 
   
@@ -62,8 +63,8 @@ export class Messenger implements IMessenger {
           );
 
           const order = await this.orderUseCase.getOrderById(data.ref);
-          this.assertQueue("order_completed");
-          this.sendToQueue("order_completed", { order });
+
+          this.publishToExchange('orderEvents', 'orders.status.completed', {order})
         }
       },
       { noAck: true }
@@ -83,8 +84,7 @@ export class Messenger implements IMessenger {
           );
         
           const order = await this.orderUseCase.getOrderById(data.ref);
-          this.assertQueue("order_failed");
-          this.sendToQueue("order_failed", { order });
+          this.publishToExchange('orderEvents', 'orders.status.failed', {order})
         }
       },
       { noAck: true }

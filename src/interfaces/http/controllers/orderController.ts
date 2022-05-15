@@ -103,8 +103,7 @@ export class OrderController {
         //   amount: total,
         // });
 
-        this.messenger.assertExchange('orderEvents','topic')
-        this.messenger.publishToExchange('orderEvents', 'order.create', {
+        this.messenger.publishToExchange('orderEvents', 'orders.status.created', {
           orderID,
           amount: total,
         })
