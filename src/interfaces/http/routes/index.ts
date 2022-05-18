@@ -21,8 +21,8 @@ messenger.createChannel().then(() => {
   //connect database
   connectDB();
   //consume events
-  messenger.consumePaymentSuccess();
-  messenger.consumePaymentFailure();
+  // messenger.consumePaymentSuccess();
+  // messenger.consumePaymentFailure();
   //listen for requests
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {

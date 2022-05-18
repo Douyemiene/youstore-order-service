@@ -97,11 +97,6 @@ export class OrderController {
           total,
           products,
         });
-        // this.messenger.assertQueue("order_created");
-        // this.messenger.sendToQueue("order_created", {
-        //   orderID,
-        //   amount: total,
-        // });
 
         this.messenger.publishToExchange('orderEvents', 'orders.status.created', {
           orderID,
@@ -115,8 +110,9 @@ export class OrderController {
           if(order.orderStatus == Status.PENDING) {
            
             await this.orderUseCase.findByIdAndUpdateStatus(orderID, Status.FAILURE)
-            this.messenger.assertQueue("order_failed");
-            this.messenger.sendToQueue("order_failed", { order });
+            this.messenger.publishToExchange('orderEvents', 'orders.status.failed', {
+              order
+            })
           }
         }
 

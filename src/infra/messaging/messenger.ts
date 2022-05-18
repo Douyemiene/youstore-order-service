@@ -8,8 +8,9 @@ export interface IMessenger {
   publishToExchange(exchange: string, key: string, msg: Object)
   sendToQueue(queue: string, content: Object): void;
   assertQueue(queue: string): Promise<void>;
-  consumePaymentSuccess(): Promise<void>;
-  consumePaymentFailure(): Promise<void>;
+  consume(): Promise<void>
+  // consumePaymentSuccess(): Promise<void>;
+  // consumePaymentFailure(): Promise<void>;
   
 }
 
@@ -27,6 +28,10 @@ export class Messenger implements IMessenger {
 
     this.channel = await connection.createChannel();
     await this.assertExchange('orderEvents','topic')
+    await this.assertExchange('paymentEvents','topic')
+    await this.assertQueue("orders");
+    await this.bindQueue('orders', 'paymentEvents', 'payments.status.*');
+    await this.consume()
   }
 
   
@@ -43,6 +48,10 @@ export class Messenger implements IMessenger {
     });
   }
 
+  async bindQueue(queue: string, exchange: string, key: string): Promise<void> {
+    await this.channel.bindQueue(queue, exchange, key);
+  }
+
   async publishToExchange(exchange: string, key: string, msg: Object){
     await this.channel.publish(exchange, key, Buffer.from(JSON.stringify(msg)));
   }
@@ -51,45 +60,62 @@ export class Messenger implements IMessenger {
     this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(content)));
   }
 
-  async consumePaymentSuccess() {
+  async consume(): Promise<void> {
     this.channel.consume(
-      "payment_success",
+      "orders",
       async (msg: Message | null) => {
         if (msg) {
+          const routingKey = msg.fields.routingKey
           const data = JSON.parse(msg.content.toString());
-          await this.orderUseCase.findByIdAndUpdateStatus(
-            data.ref,
-            Status.SUCCESS
-          );
+          console.log(`msg - ${routingKey}`)
 
-          const order = await this.orderUseCase.getOrderById(data.ref);
+          if(routingKey == 'payments.status.success'){  
+              console.log('payments.status.success')
+              //update order status and publish order completed event
+              await this.orderUseCase.findByIdAndUpdateStatus(
+                data.ref,
+                Status.SUCCESS
+              );
 
-          this.publishToExchange('orderEvents', 'orders.status.completed', {order})
+              const order = await this.orderUseCase.getOrderById(data.ref);
+              this.publishToExchange('orderEvents', 'orders.status.completed', {order})
+          }
+          else if(routingKey == 'payments.status.failed'){
+            console.log('payments.status.failed')
+                //update order status and publish order completed event
+                await this.orderUseCase.findByIdAndUpdateStatus(
+                  data.ref,
+                  Status.FAILURE
+                );
+                const order = await this.orderUseCase.getOrderById(data.ref);
+                this.publishToExchange('orderEvents', 'orders.status.failed', {order})
+          }
+         
         }
       },
       { noAck: true }
     );
   }
 
-  async consumePaymentFailure() {
-    this.channel.consume(
-      "payment_failure",
-      async (msg: Message | null) => {
-        if (msg) {
+  // async consumePaymentFailure() {
+  //   this.channel.consume(
+  //     "payment_failure",
+  //     async (msg: Message | null) => {
+  //       if (msg) {
 
-          const data = JSON.parse(msg.content.toString());
-          await this.orderUseCase.findByIdAndUpdateStatus(
-            data.ref,
-            Status.FAILURE
-          );
+  //         const data = JSON.parse(msg.content.toString());
+  //         await this.orderUseCase.findByIdAndUpdateStatus(
+  //           data.ref,
+  //           Status.FAILURE
+  //         );
         
-          const order = await this.orderUseCase.getOrderById(data.ref);
-          this.publishToExchange('orderEvents', 'orders.status.failed', {order})
-        }
-      },
-      { noAck: true }
-    );
-  }
+  //         const order = await this.orderUseCase.getOrderById(data.ref);
+  //         this.publishToExchange('orderEvents', 'orders.status.failed', {order})
+  //       }
+  //     },
+  //     { noAck: true }
+  //   );
+  // }
 }
 
 export default Messenger;
