@@ -13,15 +13,15 @@ export const validateCreateOrder = validator.body(
     total: joi.number().required(),
     products: joi.array().items(
       joi.object({
-        name: joi.string(),
-        id: joi.string(),
-        quantity: joi.number(),
-        price: joi.number(),
-        size: joi.string(),
-        color: joi.string(),
-        image: joi.string(),
-        merchantId: joi.string()
-      })
+        name: joi.string().required(),
+        id: joi.string().required(),
+        quantity: joi.number().required(),
+        price: joi.number().required(),
+        size: joi.string().required(),
+        color: joi.string().required(),
+        image: joi.string().required(),
+        merchantId: joi.string().required()
+      }).required()
     ),
   })
 );
