@@ -9,6 +9,7 @@ interface Product {
   size: string;
   color: string;
   image: string;
+  merchantId: string
 }
 
 export interface IOrder {
@@ -29,7 +30,8 @@ const ProductSchema = new mongoose.Schema<Product>({
   price: Number,
   size: String,
   color: String,
-  image: String
+  image: String,
+  merchantId: String
 });
 
 const OrderSchema = new mongoose.Schema<IOrder>({

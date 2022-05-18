@@ -20,7 +20,8 @@ export interface IOrderProps {
   customerEmail: string;
   products: Array<{ name: string; id: string; quantity: number, price: number, size: string;
     color: string,
-    image: string}>;
+    image: string,
+    merchantId: string}>;
   
 }
 

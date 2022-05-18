@@ -20,6 +20,7 @@ export const validateCreateOrder = validator.body(
         size: joi.string(),
         color: joi.string(),
         image: joi.string(),
+        merchantId: joi.string()
       })
     ),
   })

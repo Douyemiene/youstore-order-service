@@ -69,7 +69,7 @@ export class OrderController {
       customerId: string;
       customerEmail: string;
       total: number;
-      products: Array<{ name: string; id: string; quantity: number, price: number, size: string,
+      products: Array<{ name: string; id: string; quantity: number, price: number, size: string, merchantId: string,
         color: string,
         image: string}>;
     } = req.body;
