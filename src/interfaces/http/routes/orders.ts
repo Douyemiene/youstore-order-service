@@ -7,7 +7,7 @@ import {
   validateGetOrders
 } from "../reqValidation";
 
-// import { OrderController } from "../controllers/orderController";
+
 import container from "../../../di-setup";
 import { verifyCustomer } from "../../../middlewares";
 
@@ -15,10 +15,8 @@ const { orderController } = container.cradle;
 
 const OrderRouter = Router();
 
-// interface Req extends Request {
-//   id: string | jwt.JwtPayload;
-// }
-OrderRouter.get("/", (req: Request, res: Response) =>
+
+OrderRouter.get("/", validateGetOrders, (req: Request, res: Response) =>
   orderController.getOrders(req,res)
 );
 

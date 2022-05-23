@@ -67,10 +67,10 @@ export class Messenger implements IMessenger {
         if (msg) {
           const routingKey = msg.fields.routingKey
           const data = JSON.parse(msg.content.toString());
-          console.log(`msg - ${routingKey}`)
+          //console.log(`msg - ${routingKey}`)
 
           if(routingKey == 'payments.status.success'){  
-              console.log('payments.status.success')
+              //console.log('payments.status.success')
               //update order status and publish order completed event
               await this.orderUseCase.findByIdAndUpdateStatus(
                 data.ref,
@@ -81,7 +81,7 @@ export class Messenger implements IMessenger {
               this.publishToExchange('orderEvents', 'orders.status.completed', {order})
           }
           else if(routingKey == 'payments.status.failed'){
-            console.log('payments.status.failed')
+            //console.log('payments.status.failed')
                 //update order status and publish order completed event
                 await this.orderUseCase.findByIdAndUpdateStatus(
                   data.ref,

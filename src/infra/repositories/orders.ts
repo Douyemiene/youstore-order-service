@@ -6,7 +6,7 @@ export interface IOrderRepo {
   save(order: IOrderProps): Promise<string>;
   getOrdersByCustomerId(id: string, limit: number, skip:number): Promise<Array<IOrder>>;
   getOrderById(id: string): Promise<IOrder | null>;
-  getOrders(): Promise<IOrder[] | null>
+  getOrders(orderStatus:Status,deliveryStatus:DeliveryStatus): Promise<IOrder[] | null>
   findByIdAndUpdate(id: string, orderStatus: Status): Promise<void>;
   findByIdAndUpdateDelivery(id: string, deliveryStatus: DeliveryStatus): Promise<void>
 }
@@ -35,8 +35,11 @@ export class OrderRepo implements IOrderRepo {
     return order;
   }
 
-  async getOrders(): Promise<IOrder[] | null> {
-    const orders = await this.orders.find({}).exec();
+  async getOrders(orderStatus:Status,deliveryStatus:DeliveryStatus): Promise<IOrder[] | null> {
+    let query = {}
+    query = orderStatus? {orderStatus} : {}
+    query = deliveryStatus? {...query, deliveryStatus}: {...query}
+    const orders = await this.orders.find(query).exec();
     return orders;
   }
 

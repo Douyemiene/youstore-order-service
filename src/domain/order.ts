@@ -5,10 +5,10 @@ export enum Status {
 }
 
 export enum DeliveryStatus {
-  NOT_INITIATED = "Not Initalized",
-  INIT = "Initiated",
+  NOT_INITIATED = "Pending",
+  INIT = "Dispatched",
   DELIVERED = "Delivered",
-  FAILURE = "Failure",
+  FAILURE = "Failed",
 }
 
 export interface IOrderProps {

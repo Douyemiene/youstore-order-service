@@ -21,8 +21,8 @@ export class OrderUsecase {
     return orders;
   }
 
-  async getOrders(): Promise<IOrder[] | null> {
-    const orders = await this.orderRepo.getOrders();
+  async getOrders(orderStatus:Status,deliveryStatus:DeliveryStatus): Promise<IOrder[] | null> {
+    const orders = await this.orderRepo.getOrders(orderStatus,deliveryStatus);
     return orders;
   }
 
