@@ -6,6 +6,8 @@ const validator = require("express-joi-validation").createValidator({
   passError: true,
 });
 
+
+
 export const validateCreateOrder = validator.body(
   joi.object({
     customerId: joi.string().required(),
@@ -25,6 +27,11 @@ export const validateCreateOrder = validator.body(
     ),
   })
 );
+
+export const validateGetOrders = validator.params(
+  joi.object({ id: joi.string()})
+);
+
 
 export const validateGetOrderById = validator.params(
   joi.object({ id: joi.string().required() })
