@@ -20,6 +20,15 @@ export class OrderController {
     this.messenger = messenger;
   }
 
+  async getOrders(req: Request, res: Response): Promise<void> {
+    // const { id } = req.params;
+    try {
+      const orders = await this.orderUseCase.getOrders();
+      res.status(200).json({ success: true, data: orders});
+    } catch ({ name, message }) {
+      res.status(404).json({ success: false, data: null });
+    }
+  }
 
   async getOrderById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;

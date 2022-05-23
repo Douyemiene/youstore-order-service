@@ -9,9 +9,9 @@ const app = express();
 app.use(cors({ origin: '*'}))
 
 app.use(express.json());
-app.get('/', (req,res)=> {
-  res.json({message: 'Make your orders with this API'})
-})
+// app.get('/', (req,res)=> {
+//   res.json({message: 'Make your orders with this API'})
+// })
 
 app.use("/", cors(), OrderRouter);
 

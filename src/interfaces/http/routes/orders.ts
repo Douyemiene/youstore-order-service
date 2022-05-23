@@ -4,6 +4,7 @@ import {
   validateGetOrderById,
   sendBadRequestErrorResponse,
   validatefindByIdAndUpdateDelivery,
+  validateGetOrders
 } from "../reqValidation";
 
 // import { OrderController } from "../controllers/orderController";
@@ -17,6 +18,10 @@ const OrderRouter = Router();
 // interface Req extends Request {
 //   id: string | jwt.JwtPayload;
 // }
+OrderRouter.get("/", (req: Request, res: Response) =>
+  orderController.getOrders(req,res)
+);
+
 OrderRouter.put("/delivery/:id", validatefindByIdAndUpdateDelivery, (req: Request, res: Response) =>
   orderController.findByIdAndUpdateDelivery(req,res)
 );
