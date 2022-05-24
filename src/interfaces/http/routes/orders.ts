@@ -9,18 +9,18 @@ import {
 
 
 import container from "../../../di-setup";
-import { verifyCustomer } from "../../../middlewares";
+import { verifyCustomer, verifyAdminPermission } from "../../../middlewares";
 
 const { orderController } = container.cradle;
 
 const OrderRouter = Router();
 
 
-OrderRouter.get("/", validateGetOrders, (req: Request, res: Response) =>
+OrderRouter.get("/", validateGetOrders, verifyAdminPermission('view-orders'), (req: Request, res: Response) =>
   orderController.getOrders(req,res)
 );
 
-OrderRouter.put("/delivery/:id", validatefindByIdAndUpdateDelivery, (req: Request, res: Response) =>
+OrderRouter.put("/delivery/:id", validatefindByIdAndUpdateDelivery, verifyAdminPermission('mark-delivery-status'), (req: Request, res: Response) =>
   orderController.findByIdAndUpdateDelivery(req,res)
 );
 
