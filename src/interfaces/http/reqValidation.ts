@@ -37,6 +37,11 @@ export const validateGetOrderById = validator.params(
   joi.object({ deliveryStatus: joi.string().required() })
 );
 
+export const validateGetOrderByCustomerId = validator.params(
+  joi.object({ id: joi.string().required() }),
+);
+
+
 export const validatefindByIdAndUpdateDelivery = validator.params(
   joi.object({ id: joi.string().required() })
 );

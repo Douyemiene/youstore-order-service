@@ -4,7 +4,8 @@ import {
   validateGetOrderById,
   sendBadRequestErrorResponse,
   validatefindByIdAndUpdateDelivery,
-  validateGetOrders
+  validateGetOrders,
+  validateGetOrderByCustomerId
 } from "../reqValidation";
 
 
@@ -36,7 +37,7 @@ OrderRouter.get("/:id", validateGetOrderById, (req: Request, res: Response) =>
 
 OrderRouter.get(
   "/customer/:id",
-  validateGetOrderById,
+  validateGetOrderByCustomerId,
   (req: Request, res: Response) =>
     orderController.getOrdersfromCustomer(req, res)
 );
