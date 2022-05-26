@@ -34,7 +34,8 @@ export const validateGetOrders = validator.params(
 
 export const validateGetOrderById = validator.query(
   joi.object({ orderStatus: joi.string(),
-    deliveryStatus: joi.string() }),
+    deliveryStatus: joi.string(),
+    user_key: joi.string() }),
 );
 
 export const validateGetOrderByCustomerId = validator.params(
