@@ -17,7 +17,7 @@ const { orderController } = container.cradle;
 const OrderRouter = Router();
 
 
-OrderRouter.get("/", validateGetOrders, verifyAdminPermission('view-orders'), (req: Request, res: Response) =>
+OrderRouter.get("/", validateGetOrderById, verifyAdminPermission('view-orders'), (req: Request, res: Response) =>
   orderController.getOrders(req,res)
 );
 
