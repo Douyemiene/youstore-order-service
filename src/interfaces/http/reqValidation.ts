@@ -32,9 +32,9 @@ export const validateGetOrders = validator.params(
   joi.object({ id: joi.string()})
 );
 
-export const validateGetOrderById = validator.params(
-  joi.object({ orderStatus: joi.string().required() }),
-  joi.object({ deliveryStatus: joi.string().required() })
+export const validateGetOrderById = validator.query(
+  joi.object({ orderStatus: joi.string(),
+    deliveryStatus: joi.string() }),
 );
 
 export const validateGetOrderByCustomerId = validator.params(
