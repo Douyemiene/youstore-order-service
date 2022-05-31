@@ -10,6 +10,7 @@ const validator = require("express-joi-validation").createValidator({
 
 export const validateCreateOrder = validator.body(
   joi.object({
+    name: joi.string().required(),
     customerId: joi.string().required(),
     customerEmail: joi.string().required(),
     total: joi.number().required(),

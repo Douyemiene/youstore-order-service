@@ -60,11 +60,13 @@ export class OrderController {
 
   async createOrder(req: Request, res: Response): Promise<void> {
     const {
+      name,
       customerId,
       customerEmail,
       total,
       products,
     }: {
+      name:string;
       customerId: string;
       customerEmail: string;
       total: number;
@@ -91,6 +93,7 @@ export class OrderController {
 
       if (availableResponse.data.outOfStock.length == 0) {
         const orderID = await this.orderUseCase.createOrder({
+          name,
           customerId,
           customerEmail,
           total,

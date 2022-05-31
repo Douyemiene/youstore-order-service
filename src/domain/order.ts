@@ -12,6 +12,7 @@ export enum DeliveryStatus {
 }
 
 export interface IOrderProps {
+  name: string,
   customerId: string;
   orderStatus?: Status;
   orderDate?: string;
