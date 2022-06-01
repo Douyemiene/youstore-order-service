@@ -58,6 +58,41 @@ export class OrderController {
     }
   }
 
+  async getOrdersfromCustomer(req: Request, res: Response): Promise<void> {
+    const customerID = req.params.id;
+    let page ='1'
+    let size = '10'
+     if(req.query.page){
+      page = req.query.page.toString();
+    }
+    if(req.query.size){
+      size = req.query.size.toString();
+    }
+    try {
+      let pageInt = parseInt(page)
+      let sizeInt = parseInt(size)
+      const limit = parseInt(size)
+
+      const skip = (pageInt - 1) * sizeInt
+      const order = await this.orderUseCase.getOrdersfromCustomer(customerID,limit,skip);
+      res.status(200).json({ success: true, data: order });
+    } catch (err) {
+      res.status(200).json({ success: false, data: [] });
+    }
+  }
+
+  async getOrders(req: Request, res: Response): Promise<void> {
+    const orderStatus: any = req.query.orderStatus
+    const deliveryStatus: any = req.query.deliveryStatus
+    try {
+      const orders = await this.orderUseCase.getOrders(orderStatus,deliveryStatus);
+      res.status(200).json({ success: true, data: orders});
+    } catch ({ name, message }) {
+      res.status(404).json({ success: false, data: null });
+    }
+  }
+
+
   async createOrder(req: Request, res: Response): Promise<void> {
     const {
       name,
@@ -120,7 +155,6 @@ export class OrderController {
 
       },3600000)
 
-      //response
         res.status(201).json({
           success: true,
           message: "Order created successfully",
@@ -140,42 +174,6 @@ export class OrderController {
     }
     
   }
-
-  async getOrdersfromCustomer(req: Request, res: Response): Promise<void> {
-    const customerID = req.params.id;
-    //should be in done in model
-    let page ='1'
-    let size = '10'
-     if(req.query.page){
-      page = req.query.page.toString();
-    }
-    if(req.query.size){
-      size = req.query.size.toString();
-    }
-    try {
-      let pageInt = parseInt(page)
-      let sizeInt = parseInt(size)
-      const limit = parseInt(size)
-
-      const skip = (pageInt - 1) * sizeInt
-      const order = await this.orderUseCase.getOrdersfromCustomer(customerID,limit,skip);
-      res.status(200).json({ success: true, data: order });
-    } catch (err) {
-      res.status(200).json({ success: false, data: [] });
-    }
-  }
-
-  async getOrders(req: Request, res: Response): Promise<void> {
-    const orderStatus: any = req.query.orderStatus
-    const deliveryStatus: any = req.query.deliveryStatus
-    try {
-      const orders = await this.orderUseCase.getOrders(orderStatus,deliveryStatus);
-      res.status(200).json({ success: true, data: orders});
-    } catch ({ name, message }) {
-      res.status(404).json({ success: false, data: null });
-    }
-  }
-
 
 }
 
