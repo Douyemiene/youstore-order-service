@@ -9,28 +9,22 @@ const app = express();
 app.use(cors({ origin: '*'}))
 
 app.use(express.json());
-// app.get('/', (req,res)=> {
-//   res.json({message: 'Make your orders with this API'})
-// })
+
 
 app.use("/", cors(), OrderRouter);
 
-const { messenger } = container.cradle;
+const { messenger, orderUseCase } = container.cradle;
 
-messenger.createChannel().then(() => {
+messenger.createChannel().then(async () => {
   //connect database
-  connectDB();
+  await connectDB();
   //consume events
-  // messenger.consumePaymentSuccess();
-  // messenger.consumePaymentFailure();
-  //listen for requests
+  await orderUseCase.consume()
+
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
   });
 });
 
-//handle unhandled promise rejection
-// process.on("unhandledRejection", (err, promise) => {
-//   server.close(() => process.exit(1));
-// });
+
